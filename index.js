@@ -58,7 +58,7 @@ module.exports = {
 	promise: function (func, rate) {
 		var limited = module.exports.sync (function (promise, args) {
 			promise.sync (
-				func.call (null, args)
+				func.apply (null, args)
 			);
 		}, rate);
 
