@@ -9,7 +9,7 @@
 	"version": "0.1.0",
 	"main": "index.js",
 	"dependencies": {
-		"lodash": "0.10.x",
+		"lodash": "*",
 		"vow": "*"
 	},
 	"private": true
