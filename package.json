@@ -9,8 +9,8 @@
 	"version": "0.1.0",
 	"main": "index.js",
 	"dependencies": {
-		"lodash": "*",
-		"vow": "*"
+		"vow": "*",
+		"lodash": "*"
 	},
 	"private": true
 }
