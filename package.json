@@ -12,5 +12,5 @@
 		"vow": "*",
 		"lodash": "*"
 	},
-	"private": true
+	"private": false
 }
