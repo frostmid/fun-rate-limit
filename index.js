@@ -62,7 +62,7 @@ module.exports = {
 			);
 		}, rate);
 
-		return function (arguments) {
+		return function () {
 			var promise = Promises.promise ();
 
 			limited (promise, arguments);
