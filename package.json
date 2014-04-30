@@ -6,7 +6,7 @@
     "name": "Sergey Antoninko",
     "email": "lyxsus@gmail.com"
   },
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "index.js",
   "dependencies": {
     "q": "^1.0.1",
