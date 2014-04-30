@@ -6,23 +6,29 @@ function rateLimit (func, rate, async) {
 	var timeOutRef = false;
 	var currentlyEmptyingQueue = false;
 
+	var exec = function() {
+		if (async) {
+			_.defer (function () {
+				var f = queue.shift ();
+				if (f) f.call ();
+			});
+		} else {
+			var f = queue.shift ();
+			if (f) f.call ();
+		}
+
+		emptyQueue ();
+	};
+
 	var emptyQueue = function () {
 		if (queue.length) {
+			if (!currentlyEmptyingQueue) {
+				exec ();
+			}
+
 			currentlyEmptyingQueue = true;
 
-			_.delay (function() {
-				if (async) {
-					_.defer (function () {
-						var f = queue.shift ();
-						if (f) f.call ();
-					});
-				} else {
-					var f = queue.shift ();
-					if (f) f.call ();
-				}
-
-				emptyQueue ();
-			}, rate);
+			_.delay (exec, rate);
 		} else {
 			currentlyEmptyingQueue = false;
 		}
