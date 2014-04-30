@@ -1,16 +1,16 @@
 {
-	"name": "fun-rate-limit",
-	"description": "adoptation of ratelimit function from stackoverflow for promises",
-	"homepage": "http://futurios.org",
-	"author": {
-		"name": "Sergey Antoninko",
-		"email": "lyxsus@gmail.com"
-	},
-	"version": "0.1.6",
-	"main": "index.js",
-	"dependencies": {
-		"vow": "*",
-		"lodash": "*"
-	},
-	"private": false
+  "name": "fun-rate-limit",
+  "description": "adoptation of ratelimit function from stackoverflow for promises",
+  "homepage": "http://futurios.org",
+  "author": {
+    "name": "Sergey Antoninko",
+    "email": "lyxsus@gmail.com"
+  },
+  "version": "0.1.6",
+  "main": "index.js",
+  "dependencies": {
+    "q": "^1.0.1",
+    "underscore": "^1.6.0"
+  },
+  "private": false
 }

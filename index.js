@@ -1,5 +1,5 @@
-var _ = require ('lodash'),
-	Promises = require ('vow');
+var _ = require ('underscore'),
+	Q = require ('q');
 
 function rateLimit (func, rate, async) {
 	var queue = [];
@@ -62,21 +62,21 @@ module.exports = {
 	},
 
 	promise: function (func, rate) {
-		var limited = module.exports.sync (function (promise, args) {
-			Promises.when (
+		var limited = module.exports.sync (function (deferred, args) {
+			Q.when (
 				func.apply (null, args)
 			)
-				.then (_.bind (promise.fulfill, promise))
-				.fail (_.bind (promise.reject, promise))
+				.then (deferred.fulfill.bind (deferred))
+				.fail (deferred.reject.bind (deferred))
 				.done ();
 		}, rate);
 
 		return function () {
-			var promise = Promises.promise ();
+			var deferred = Q.defer ();
 
-			limited (promise, arguments);
+			limited (deferred, arguments);
 
-			return promise;
+			return deferred.promise;
 		};
 	}
 }
