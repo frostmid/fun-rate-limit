@@ -1,36 +1,35 @@
-var _ = require ('underscore'),
+var _ = require ('lodash'),
 	Q = require ('q');
 
 function rateLimit (func, rate, async) {
-	var queue = [];
-	var timeOutRef = false;
-	var currentlyEmptyingQueue = false;
-
-	var exec = function() {
+	var queue = {}; 
+	var currentlyEmptyingQueue = {};
+	
+	var exec = function(queueID) {
 		if (async) {
 			_.defer (function () {
-				var f = queue.shift ();
+				var f = queue[queueID].shift ();
 				if (f) f.call ();
 			});
 		} else {
-			var f = queue.shift ();
+			var f = queue[queueID].shift ();
 			if (f) f.call ();
 		}
 
-		emptyQueue ();
+		emptyQueue (queueID);
 	};
 
-	var emptyQueue = function () {
-		if (queue.length) {
-			if (!currentlyEmptyingQueue) {
-				exec ();
+	var emptyQueue = function (queueID) {
+		if (queue[queueID].length) {
+			if (!currentlyEmptyingQueue[queueID]) {
+				exec (queueID);
 			}
 
-			currentlyEmptyingQueue = true;
+			currentlyEmptyingQueue[queueID] = true;
 
-			_.delay (exec, rate);
+			_.delay (function(){ exec(queueID); }, rate);
 		} else {
-			currentlyEmptyingQueue = false;
+			currentlyEmptyingQueue[queueID] = false;
 		}
 	};
 
@@ -40,13 +39,16 @@ function rateLimit (func, rate, async) {
 			return e;
 		});
 		
+		var queueID = _.values(_.findLast(_.flatten(arguments), function(item) { return typeof item.queueID != 'undefined'; })).join('');		
+		if (typeof queue[queueID] == 'undefined') queue[queueID] = [];
+
 		// call apply so that we can pass in arguments as parameters as opposed to an array
-		queue.push (
+		queue[queueID].push (
 			_.bind.apply (this, [func, this].concat (args))
 		);
-
-		if (!currentlyEmptyingQueue) {
-			emptyQueue ();
+		
+		if (!currentlyEmptyingQueue[queueID]) {
+			emptyQueue (queueID);
 		}
 	};
 };
@@ -73,7 +75,6 @@ module.exports = {
 
 		return function () {
 			var deferred = Q.defer ();
-
 			limited (deferred, arguments);
 
 			return deferred.promise;
