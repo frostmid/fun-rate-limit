@@ -39,7 +39,9 @@ function rateLimit (func, rate, async) {
 			return e;
 		});
 		
-		var queueID = _.values(_.findLast(_.flatten(arguments), function(item) { return typeof item.queueID != 'undefined'; })).join('');		
+		var queueID = _.findLast(_.flatten(arguments), function(item) { return typeof item.queueID != 'undefined'; });
+		queueID = (typeof queueID != 'undefined') ? queueID.queueID : null;
+		
 		if (typeof queue[queueID] == 'undefined') queue[queueID] = [];
 
 		// call apply so that we can pass in arguments as parameters as opposed to an array
